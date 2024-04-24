@@ -43,8 +43,16 @@ export default function MultiSelect<T extends HasLabel>(props: MultiSelectProps<
         <div className={styles.wrapper} ref={parentRef}>
             <div className={styles['input-container']}>
                 <List data={selecteds} render={renderSelected} />
-                <Tappable onTap={() => setIsExpanded(true)} className={styles.input}>
-                    <input type="text" />
+                <Tappable
+                    className={styles.input}
+                    onTap={() => setIsExpanded(true)}
+                    onFocus={() => setIsExpanded(true)}
+                    onBlur={() => setIsExpanded(false)}
+                >
+                    <input
+                        type="text"
+                        onKeyUp={e => { if (e.key === "Backspace" && selecteds.length !== 0 && (e.target as HTMLInputElement).value.length === 0) setSelecteds(p => { const [_last, ...others] = p.reverse(); return others; }); }}
+                    />
                 </Tappable>
             </div>
             {
