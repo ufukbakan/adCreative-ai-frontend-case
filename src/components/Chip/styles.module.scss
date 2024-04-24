@@ -1,0 +1,23 @@
+@use "@/base";
+
+.chip {
+  @extend .h-stack;
+  align-items: center;
+  background-color: #e2e8f0;
+  color: #334155;
+  padding: 9px;
+  border-radius: 13px;
+}
+.remove-button {
+  background-color: #94a3b8;
+  color: #f8fafc;
+  border-radius: 4px;
+  margin-left: 1ch;
+  display: block !important;
+  text-align: center;
+  width: 1em;
+  height: 1em;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 0.75em;
+}
