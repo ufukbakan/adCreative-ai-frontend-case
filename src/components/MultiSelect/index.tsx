@@ -11,7 +11,7 @@ interface HasLabel {
 
 export interface MultiSelectProps<T extends HasLabel> {
     options: T[],
-    renderOption: (option: T) => JSX.Element
+    renderOption: (option: T, isSelected: boolean) => JSX.Element
 }
 
 export default function MultiSelect<T extends HasLabel>(props: MultiSelectProps<T>) {
@@ -29,15 +29,15 @@ export default function MultiSelect<T extends HasLabel>(props: MultiSelectProps<
         }
     };
 
-    const keepExpandedLabels = ["remove-button", "option"]
     const fold = (e: Event) => {
-        if (e.target instanceof HTMLElement && !keepExpandedLabels.includes(e.target.ariaLabel || "")) {
+        const ignoreFoldingFor = ["remove-button", "option"]
+        if (e.target instanceof HTMLElement && !ignoreFoldingFor.includes(e.target.ariaLabel || "")) {
             setIsExpanded(false);
         }
     };
     const parentRef = useClickOutside<HTMLDivElement>({ callback: fold });
 
-    const renderOption = (element: T) => <Tappable onTap={() => toggleSelected(element)}>{props.renderOption(element)}</Tappable>
+    const renderOption = (element: T) => <Tappable onTap={() => toggleSelected(element)}>{props.renderOption(element, selecteds.includes(element))}</Tappable>
 
     return (
         <div className={styles.wrapper} ref={parentRef}>

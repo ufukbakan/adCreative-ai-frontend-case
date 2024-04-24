@@ -31,7 +31,7 @@ const options = [
   { label: "rihanna", value: 5 },
 ];
 
-const renderOption = (o: typeof options[0]) => <div aria-label='option'>{o.label}</div>
+const renderOption = (o: typeof options[0], isSelected: boolean) => <div aria-label='option'>{o.label} {isSelected && "+"}</div>
 
 function App() {
 

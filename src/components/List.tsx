@@ -2,7 +2,7 @@ import { FixedSizeList, ListChildComponentProps } from "react-window";
 
 interface ListBaseProps<T> {
     data: T[],
-    render: (element: T) => JSX.Element,
+    render: ((element: T) => JSX.Element) | ((element: T, index: number) => JSX.Element),
 }
 interface NonVirutalListProps<T> extends ListBaseProps<T> {
     virtualScroll?: false
@@ -17,7 +17,7 @@ export type ListProps<T> = NonVirutalListProps<T> | VirutalListProps<T>;
 
 export default function List<T>(props: ListProps<T>) {
     function renderRow(options: ListChildComponentProps) {
-        return <div style={{ display: "flex", ...options.style }}>{props.render(props.data[options.index])}</div>;
+        return <div style={{ display: "flex", ...options.style }}>{props.render(props.data[options.index], options.index)}</div>;
     }
 
     function renderList() {
