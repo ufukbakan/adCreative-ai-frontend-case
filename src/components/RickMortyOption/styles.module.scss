@@ -2,14 +2,17 @@
 
 .option-container {
   @extend .h-stack;
+  position: relative;
   width: 100%;
   align-items: center;
   gap: 20px;
+  padding: 9px;
 }
 
 .option-container img {
   width: 70px;
   aspect-ratio: 1;
+  flex-shrink: 0;
 }
 
 .option-container h6 {
@@ -22,6 +25,14 @@
 
 .text-container {
   @extend .v-stack;
+  max-width: calc(100% - 140px);
+}
+
+.text-container p,
+.text-container h6 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .option-container input[type="checkbox"] {
@@ -30,6 +41,7 @@
   height: 22px;
   border: 2px solid #767676;
   accent-color: #0075ff;
+  flex-shrink: 0;
 }
 
 .option-container input[type="checkbox"]:focus-visible {
