@@ -7,7 +7,9 @@
   color: #334155;
   padding: 9px;
   border-radius: 13px;
+  flex-shrink: 0;
 }
+
 .remove-button {
   background-color: #94a3b8;
   color: #f8fafc;
