@@ -2,7 +2,7 @@ import { ReactElement, memo, useEffect, useRef, useState } from "react";
 import { render } from "react-dom";
 import Tappable from "../Tappable";
 import styles from "./styles.module.scss";
-import { classNames } from "@/utils/style";
+import { classNames } from "@/utils/styleUtils";
 
 interface OverflowProps {
     maxWidth: number;
