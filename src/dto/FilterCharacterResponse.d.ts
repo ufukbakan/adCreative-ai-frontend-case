@@ -6,7 +6,7 @@ interface Characters {
   results: Result[];
 }
 
-interface Result {
+export interface Result {
   id: string;
   image: string;
   name: string;
