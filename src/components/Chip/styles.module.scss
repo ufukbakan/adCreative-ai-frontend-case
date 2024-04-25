@@ -9,17 +9,18 @@
   border-radius: 13px;
   flex-shrink: 0;
 }
-
 .remove-button {
   background-color: #94a3b8;
   color: #f8fafc;
   border-radius: 4px;
   margin-left: 1ch;
-  display: block !important;
-  text-align: center;
-  width: 1em;
-  height: 1em;
+  justify-content: center;
+  align-items: center;
+  width: 1em !important;
+  height: 1em !important;
   cursor: pointer;
   font-weight: bold;
-  line-height: 0.75em;
+}
+.remove-button:focus-visible {
+  outline: 2px solid red;
 }

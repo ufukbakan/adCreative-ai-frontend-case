@@ -12,6 +12,10 @@
 }
 
 .virtual-list-item:has(div input[type="checkbox"]:focus-visible),
+.virtual-list-item:has(button:focus-visible),
 .virtual-list-item:hover {
   background-color: #dfdfdf;
+}
+.virtual-list-item:has(>*:focus-visible) input {
+  box-shadow: 0px 0px 10px #0075ff;
 }
