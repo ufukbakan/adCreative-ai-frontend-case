@@ -1,7 +1,7 @@
-import { HTMLAttributes, MouseEvent, PropsWithChildren, TouchEvent, UIEvent, useState } from 'react';
-import styles from "./styles.module.scss";
 import { isTouchDevice as getIsTouchDevice } from '@/utils/navigatorUtils';
 import { experimental_options } from "million/experimental";
+import { HTMLAttributes, MouseEvent, PropsWithChildren, TouchEvent, UIEvent, useState } from 'react';
+import styles from "./styles.module.scss";
 experimental_options.noSlot = true;
 
 interface TappableProps extends PropsWithChildren, HTMLAttributes<HTMLElement> {
@@ -24,12 +24,14 @@ export default function Tappable(props: TappableProps) {
         }
     };
     const handleClick = (event: MouseEvent) => !isTouchDevice && props.onTap(event);
-    const propsToInherit = {
-        ...props,
+
+    const propsToInherit: HTMLAttributes<HTMLButtonElement> = {
+        ...(Object.fromEntries(Object.entries(props).filter(([key,]) => key !== "onTap"))),
         onTouchStart: handleTouchStart,
         onTouchMove: handleTouchMove,
         onTouchEnd: handleTouchEnd,
         onClick: handleClick,
+        tabIndex: 0,
         className: [styles.tappable, props.className].filter(x => x).join(" "),
         style: {
             opacity: isDragged ? 0.8 : 1,
@@ -37,10 +39,10 @@ export default function Tappable(props: TappableProps) {
         }
     };
     return (
-        <div
+        <button
             {...propsToInherit}
         >
             {props.children}
-        </div>
+        </button>
     );
 }
