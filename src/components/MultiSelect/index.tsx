@@ -4,6 +4,10 @@ import Chip from "../Chip";
 import List, { ListProps } from "../List";
 import Tappable from "../Tappable";
 import styles from "./styles.module.scss";
+import { getCumilativeAriaLabels } from "@/utils/domUtils";
+import { useHeightToBottomScreen } from "@/hooks/heightToBottom";
+import { useRecoilState } from "recoil";
+import { inputAtom } from "@/atoms/multiSelectInput";
 
 export interface MultiSelectProps<T> {
     options: T[] | ((input: string) => Promise<T[]>),
@@ -16,7 +20,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [selecteds, setSelecteds] = useState<T[]>([]);
-    const [input, setInput] = useState("");
+    const [input, setInput] = useRecoilState(inputAtom);
     const removeSelected = (element: T) => setSelecteds(p => p.filter(e => e != element));
     const addSelected = (element: T) => setSelecteds(p => [...p, element]);
     const renderSelected = (element: T) => <Chip children={element[props.label] as ReactNode} removable={true} onRemove={() => removeSelected(element)} />
@@ -29,12 +33,15 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     };
 
     const fold = (e: Event) => {
-        const ignoreFoldingFor = ["remove-button", "option"]
-        if (e.target instanceof HTMLElement && !ignoreFoldingFor.includes(e.target.ariaLabel || "")) {
-            setIsExpanded(false);
+        if (e.target instanceof HTMLElement) {
+            const ignoreFoldingFor = ["remove-button", "option"]
+            const ariaLabels = getCumilativeAriaLabels(e.target);
+            if (!ariaLabels.some(label => ignoreFoldingFor.includes(label)))
+                setIsExpanded(false);
         }
     };
     const parentRef = useClickOutside<HTMLDivElement>({ callback: fold });
+    const heightToBottom = useHeightToBottomScreen(parentRef);
 
     const renderOption = (element: T) => <Tappable onTap={() => toggleSelected(element)}>{props.renderOption(element, selecteds.includes(element))}</Tappable>
     const listData = useMemo(() => {
@@ -49,8 +56,8 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     const listProps: ListProps<T> = {
         render: renderOption,
         virtualScroll: props.virtualScroll ?? false,
-        listHeight: 730,
-        itemsToDisplay: 5.12,
+        listHeight: heightToBottom - 100,
+        itemsToDisplay: heightToBottom / 120,
         data: listData,
         visible: isExpanded
     }
@@ -71,7 +78,9 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
                     />
                 </Tappable>
             </div>
-            <List {...listProps} />
+            <div className={styles['options-container']}>
+                <List {...listProps} />
+            </div>
         </div>
     )
 }
