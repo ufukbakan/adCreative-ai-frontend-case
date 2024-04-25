@@ -1,13 +1,13 @@
+import { inputAtom } from "@/atoms/multiSelectInput";
 import { useClickOutside } from "@/hooks/clickOutside";
-import { ReactNode, useMemo, useState } from "react";
+import { useHeightToBottomScreen } from "@/hooks/heightToBottom";
+import { getCumilativeAriaLabels } from "@/utils/domUtils";
+import { KeyboardEvent, ReactNode, useCallback, useMemo, useState } from "react";
+import { useRecoilState } from "recoil";
 import Chip from "../Chip";
 import List, { ListProps } from "../List";
 import Tappable from "../Tappable";
 import styles from "./styles.module.scss";
-import { getCumilativeAriaLabels } from "@/utils/domUtils";
-import { useHeightToBottomScreen } from "@/hooks/heightToBottom";
-import { useRecoilState } from "recoil";
-import { inputAtom } from "@/atoms/multiSelectInput";
 
 export interface MultiSelectProps<T> {
     options: T[] | ((input: string) => Promise<T[]>),
@@ -26,6 +26,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [selecteds, setSelecteds] = useState<T[]>([]);
     const [input, setInput] = useRecoilState(inputAtom);
+    const [allowKeyboardDelete, setAllowKeyboardDelete] = useState(true);
     const removeSelected = (element: T) => setSelecteds(p => p.filter(e => e != element));
     const addSelected = (element: T) => setSelecteds(p => [...p, element]);
     const renderSelected = (element: T) => <Chip children={element[props.chipLabel] as ReactNode} removable={true} onRemove={() => removeSelected(element)} />
@@ -48,7 +49,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     const parentRef = useClickOutside<HTMLDivElement>({ callback: fold });
     const heightToBottom = useHeightToBottomScreen(parentRef);
 
-    const renderOption = (element: T, index: number) => <Tappable onTap={() => toggleSelected(element)}>{props.renderOption({option: element, isSelected: selecteds.includes(element), index })}</Tappable>
+    const renderOption = (element: T, index: number) => <Tappable onTap={() => toggleSelected(element)}>{props.renderOption({ option: element, isSelected: selecteds.includes(element), index })}</Tappable>
     const listData = useMemo(() => {
         if (props.options instanceof Array)
             return props.options;
@@ -67,6 +68,15 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
         visible: isExpanded
     }
 
+    const onKeyUpListener = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Backspace" && selecteds.length !== 0 && e.currentTarget.value.length === 0 && allowKeyboardDelete)
+            setSelecteds(p => { const copy = [...p]; copy.pop(); return copy; });
+        if (e.currentTarget.value.length === 0)
+            setAllowKeyboardDelete(true);
+        else
+            setAllowKeyboardDelete(false);
+    }, [selecteds, allowKeyboardDelete])
+
     return (
         <div className={styles.wrapper} ref={parentRef}>
             <div className={styles['input-container']}>
@@ -79,7 +89,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
                     <input
                         type="text"
                         onChange={e => setInput(e.target.value.trim())}
-                        onKeyUp={e => { if (e.key === "Backspace" && selecteds.length !== 0 && (e.target as HTMLInputElement).value.length === 0) setSelecteds(p => { const copy = [...p]; copy.pop(); return copy; }); }}
+                        onKeyUp={onKeyUpListener}
                     />
                 </Tappable>
             </div>
