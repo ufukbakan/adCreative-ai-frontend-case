@@ -1,0 +1,38 @@
+@use "@/base";
+
+.wrapper {
+  @extend .v-stack;
+  justify-content: start;
+  position: relative;
+  border: 2px solid #94a3b8;
+  border-radius: 22px;
+  font-size: 28px;
+  line-height: 1.5em;
+  box-sizing: content-box;
+  z-index: 1;
+}
+.input {
+  width: 100%;
+}
+.input input {
+  width: 100%;
+}
+.input-container {
+  @extend .h-stack;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 9px;
+  gap: 9px;
+  width: 100%;
+  height: 78px;
+}
+
+.options-container {
+  position: absolute;
+  box-sizing: border-box;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  padding: 9px;
+}

@@ -1,0 +1,49 @@
+@use "@/base";
+
+.option-container {
+  @extend .h-stack;
+  position: relative;
+  width: 100%;
+  align-items: center;
+  gap: 20px;
+  padding: 9px;
+}
+
+.option-container img {
+  width: 70px;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+}
+
+.option-container h6 {
+  font-weight: normal;
+  font-size: 26px;
+}
+.option-container p {
+  font-size: 20px;
+}
+
+.text-container {
+  @extend .v-stack;
+  max-width: calc(100% - 140px);
+}
+
+.text-container p,
+.text-container h6 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option-container input[type="checkbox"] {
+  box-sizing: content-box;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #767676;
+  accent-color: #0075ff;
+  flex-shrink: 0;
+}
+
+.option-container input[type="checkbox"]:focus-visible {
+  box-shadow: 0px 0px 10px #0075ff;
+}

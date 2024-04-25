@@ -1,0 +1,20 @@
+.spin-container {
+  display: flex;
+  justify-content: center;
+}
+.spin-circle {
+  @keyframes rotate {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  animation: rotate 1.5s ease infinite;
+  border: 0.15em solid #94a3b8;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  border-right-color: transparent;
+}

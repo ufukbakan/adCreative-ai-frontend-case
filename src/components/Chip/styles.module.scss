@@ -1,0 +1,29 @@
+@use "@/base";
+
+.chip {
+  @extend .h-stack;
+  align-items: center;
+  background-color: #e2e8f0;
+  color: #334155;
+  padding: 9px;
+  border-radius: 13px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  font-size: 28px;
+  justify-content: space-between;
+}
+.remove-button {
+  background-color: #94a3b8;
+  color: #f8fafc;
+  border-radius: 4px;
+  margin-left: 1ch;
+  justify-content: center;
+  align-items: center;
+  width: 1em !important;
+  height: 1em !important;
+  cursor: pointer;
+  font-weight: bold;
+}
+.remove-button:focus-visible {
+  outline: 2px solid red;
+}

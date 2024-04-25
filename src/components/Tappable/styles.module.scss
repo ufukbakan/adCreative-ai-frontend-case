@@ -1,0 +1,10 @@
+.tappable {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  &:hover,
+  &:active {
+    opacity: 0.8 !important;
+  }
+}
