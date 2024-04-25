@@ -12,6 +12,7 @@
   font-size: 28px;
   justify-content: space-between;
 }
+
 .remove-button {
   background-color: #94a3b8;
   color: #f8fafc;
@@ -24,6 +25,7 @@
   cursor: pointer;
   font-weight: bold;
 }
+
 .remove-button:focus-visible {
   outline: 2px solid red;
 }

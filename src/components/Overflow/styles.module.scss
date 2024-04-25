@@ -10,6 +10,10 @@
   padding: 9px;
 }
 
+*:focus-visible .overflow-button {
+  outline: 2px solid #00d300;
+}
+
 .overflow-container {
   position: absolute;
   top: 100%;
@@ -20,11 +24,4 @@
   gap: 5px;
   padding: 10px;
   z-index: 3;
-  transition: opacity 0.4s;
-  opacity: 0;
-  pointer-events: none;
-  &.show {
-    opacity: 1;
-    pointer-events: initial;
-  }
 }

@@ -11,7 +11,7 @@ function App() {
         padding: "50px"
       }}>
         <MultiSelect virtualScroll={true} options={rickAndMortyService.filterByName} chipLabel='name' renderOption={
-          ({option, isSelected, index}) => <RickMortyOption data={option} isSelected={isSelected} index={index} />
+          ({ option, isSelected, index }) => <RickMortyOption data={option} isSelected={isSelected} index={index} />
         } />
       </div>
     </>

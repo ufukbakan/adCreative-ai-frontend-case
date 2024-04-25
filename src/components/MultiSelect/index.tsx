@@ -9,10 +9,12 @@ import List, { ListProps } from "../List";
 import Tappable from "../Tappable";
 import styles from "./styles.module.scss";
 import Overflow from "../Overflow";
+import { classNames } from "@/utils/styleUtils";
 
 export interface MultiSelectProps<T> {
     options: T[] | ((input: string) => Promise<T[]>),
     chipLabel: keyof T,
+    uniqueKey?: keyof T,
     renderOption: (parameters: RenderParameters<T>) => JSX.Element,
     virtualScroll?: boolean
 }
@@ -52,7 +54,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     const parentRef = useClickOutside<HTMLDivElement>({ callback: fold });
     const heightToBottom = useHeightToBottomScreen(parentRef);
 
-    const renderOption = (element: T, index: number) => <Tappable onTap={() => toggleSelected(element)}>{props.renderOption({ option: element, isSelected: selecteds.includes(element), index })}</Tappable>
+    const renderOption = (element: T, index: number) => <Tappable key={props.uniqueKey ? String(element[props.uniqueKey]) : index} onTap={() => toggleSelected(element)}>{props.renderOption({ option: element, isSelected: selecteds.includes(element), index })}</Tappable>
     const listData = useMemo(() => {
         if (props.options instanceof Array)
             return props.options;
@@ -68,7 +70,8 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
         listHeight: heightToBottom - 100,
         itemsToDisplay: (heightToBottom - 100) / 120,
         data: listData,
-        visible: isExpanded
+        visible: isExpanded,
+        onScrollToBottom: () => console.log("bottom")
     }
 
     const onKeyUpListener = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
@@ -93,7 +96,10 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
                     onKeyUp={onKeyUpListener}
                 />
             </div>
-            <div className={styles['options-container']}>
+            <div className={classNames({
+                [styles['options-container']]: true,
+                [styles.visible]: isExpanded
+            })}>
                 <List {...listProps} />
             </div>
         </div>

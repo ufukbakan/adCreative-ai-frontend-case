@@ -6,7 +6,22 @@
   width: 100%;
   align-items: center;
   gap: 20px;
-  padding: 9px;
+  padding: 18px;
+  border-bottom: 2px solid #94a3b8;
+  border-top: none;
+}
+
+*:focus .option-container,
+.option-container:hover {
+  background-color: #94a3b8;
+}
+*:focus .option-container input[type="checkbox"],
+.option-container:hover input[type="checkbox"] {
+  box-shadow: 0px 0px 15px #0075ff;
+}
+
+button:last-child .option-container {
+  border-bottom: none;
 }
 
 .option-container img {

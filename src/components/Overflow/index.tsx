@@ -69,10 +69,9 @@ export default function Overflow({ children, maxWidth, gap }: OverflowProps) {
             onTap={() => setShowOverflows(p => !p)}>
             <div className={styles['overflow-button']}>+{overflowedChildren.length}</div>
         </Tappable>
-        <div className={classNames({
-            [styles['overflow-container']]: true,
-            [styles.show]: showOverflows
-        })}>{overflowedChildren}</div>
+        {showOverflows && <div className={classNames({
+            [styles['overflow-container']]: true
+        })}>{overflowedChildren}</div>}
     </div>, [overflowedChildren, showOverflows])
 
     return (
