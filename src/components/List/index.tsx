@@ -49,8 +49,8 @@ export default function List<T>(props: ListProps<T>) {
         }
     }, [props.data])
 
-    function renderRow(options: ListChildComponentProps) {
-        return <div className={styles['virtual-list-item']} style={{ ...options.style }}>{props.render(data[options.index], options.index)}</div>;
+    function renderVirtualRow(options: ListChildComponentProps) {
+        return <div className={styles['virtual-list-item']} aria-label="option" style={{ ...options.style }}>{props.render(data[options.index], options.index)}</div>;
     }
 
     if (isLoading) return <h2>Loading...</h2>;
@@ -60,7 +60,7 @@ export default function List<T>(props: ListProps<T>) {
         const itemSize = Math.floor((props.listHeight / props.itemsToDisplay));
         const listHeight = props.listHeight
         return (props.visible ?? true) && <FixedSizeList width="100%" height={listHeight} itemCount={itemCount} itemSize={itemSize}>
-            {renderRow}
+            {renderVirtualRow}
         </FixedSizeList>
     } else
         return (props.visible ?? true) && data.map(props.render);
