@@ -15,7 +15,7 @@ export default function RickMortyOption(props: RickMortyOptionProps) {
     const option = props.data;
     return (
         <div aria-label="option" className={styles['option-container']}>
-            <input type="checkbox" checked={props.isSelected} />
+            <input type="checkbox" checked={props.isSelected} tabIndex={-1} />
             <img src={option.image} />
             <div className={styles['text-container']}>
                 <h6><HighlightSubText text={option.name} highlight={input} /></h6>

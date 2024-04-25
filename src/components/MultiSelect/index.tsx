@@ -8,6 +8,7 @@ import Chip from "../Chip";
 import List, { ListProps } from "../List";
 import Tappable from "../Tappable";
 import styles from "./styles.module.scss";
+import Overflow from "../Overflow";
 
 export interface MultiSelectProps<T> {
     options: T[] | ((input: string) => Promise<T[]>),
@@ -30,6 +31,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     const removeSelected = (element: T) => setSelecteds(p => p.filter(e => e != element));
     const addSelected = (element: T) => setSelecteds(p => [...p, element]);
     const renderSelected = (element: T) => <Chip key={JSON.stringify(element[props.chipLabel])} children={element[props.chipLabel] as ReactNode} removable={true} onRemove={() => removeSelected(element)} />
+    const chips = selecteds.map(renderSelected);
     const toggleSelected = (element: T) => {
         if (selecteds.includes(element)) {
             removeSelected(element);
@@ -81,7 +83,8 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     return (
         <div className={styles.wrapper} ref={parentRef}>
             <div className={styles['input-container']}>
-                <List data={selecteds} render={renderSelected} />
+                <Overflow gap={9} maxWidth={(parentRef.current?.offsetWidth || 0) / 1.5} children={chips} />
+                {/* <List data={selecteds} render={renderSelected} /> */}
                 <input
                     className={styles.input}
                     type="text"
