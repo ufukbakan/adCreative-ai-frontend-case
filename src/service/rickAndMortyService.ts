@@ -27,10 +27,6 @@ function filterByName(name: string): Promise<FilterCharacterResponse["characters
       query: FILTER_BY_NAME_QUERY,
       variables: { filter: { name } },
     })
-    .then(res => {
-      console.log(res);
-      return res;
-    })
     .then((res) => res.data.characters.results);
 }
 
