@@ -29,7 +29,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     const [allowKeyboardDelete, setAllowKeyboardDelete] = useState(true);
     const removeSelected = (element: T) => setSelecteds(p => p.filter(e => e != element));
     const addSelected = (element: T) => setSelecteds(p => [...p, element]);
-    const renderSelected = (element: T) => <Chip children={element[props.chipLabel] as ReactNode} removable={true} onRemove={() => removeSelected(element)} />
+    const renderSelected = (element: T) => <Chip key={JSON.stringify(element[props.chipLabel])} children={element[props.chipLabel] as ReactNode} removable={true} onRemove={() => removeSelected(element)} />
     const toggleSelected = (element: T) => {
         if (selecteds.includes(element)) {
             removeSelected(element);
@@ -40,10 +40,11 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
 
     const fold = (e: Event) => {
         if (e.target instanceof HTMLElement) {
-            const ignoreFoldingFor = ["remove-button", "option"]
+            const ignoreFoldingFor = ["remove-button", "option", "highlighted"]
             const ariaLabels = getCumilativeAriaLabels(e.target);
-            if (!ariaLabels.some(label => ignoreFoldingFor.includes(label)))
+            if (!ariaLabels.some(label => ignoreFoldingFor.includes(label))) {
                 setIsExpanded(false);
+            }
         }
     };
     const parentRef = useClickOutside<HTMLDivElement>({ callback: fold });
@@ -81,17 +82,13 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
         <div className={styles.wrapper} ref={parentRef}>
             <div className={styles['input-container']}>
                 <List data={selecteds} render={renderSelected} />
-                <Tappable
+                <input
                     className={styles.input}
-                    onTap={() => setIsExpanded(true)}
+                    type="text"
                     onFocus={() => setIsExpanded(true)}
-                >
-                    <input
-                        type="text"
-                        onChange={e => setInput(e.target.value.trim())}
-                        onKeyUp={onKeyUpListener}
-                    />
-                </Tappable>
+                    onChange={e => setInput(e.target.value.trim())}
+                    onKeyUp={onKeyUpListener}
+                />
             </div>
             <div className={styles['options-container']}>
                 <List {...listProps} />
