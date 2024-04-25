@@ -1,5 +1,8 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { ReactElement, memo, useEffect, useRef, useState } from "react";
 import { render } from "react-dom";
+import Tappable from "../Tappable";
+import styles from "./styles.module.scss";
+import { classNames } from "@/utils/style";
 
 interface OverflowProps {
     maxWidth: number;
@@ -11,10 +14,11 @@ export default function Overflow({ children, maxWidth, gap }: OverflowProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [visibleChildren, setVisibleChildren] = useState<ReactElement[]>([]);
     const [overflowedChildren, setOverflowedChildren] = useState<ReactElement[]>([]);
+    const [showOverflows, setShowOverflows] = useState(false);
     const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
+    const actualMaxWidth = maxWidth - (6 * gap) - (Math.log10(children.length || 1) * 20);
 
     async function mesaureChilds() {
-        const actualMaxWidth = maxWidth - (gap * (children.length - 1));
         let accumulatedWidth = 0;
         const newVisibleChildren: ReactElement[] = [];
         const newOverflowedChildren: ReactElement[] = [];
@@ -27,7 +31,10 @@ export default function Overflow({ children, maxWidth, gap }: OverflowProps) {
                 newOverflowedChildren.push(child);
             }
         }
-        setIsOverflowing(newVisibleChildren.length !== children.length);
+        const newIsOverflowing = newVisibleChildren.length !== children.length;
+        setIsOverflowing(newIsOverflowing);
+        if (!newIsOverflowing)
+            setShowOverflows(false);
         setOverflowedChildren(newOverflowedChildren);
         setVisibleChildren(newVisibleChildren);
     }
@@ -56,19 +63,27 @@ export default function Overflow({ children, maxWidth, gap }: OverflowProps) {
         )
     };
 
-    const handleShowMore = () => {
-        setIsOverflowing(false);
-        setVisibleChildren(Array.from(children));
-    };
+    function OverflowContainer() {
+        return (
+            <>
+                <Tappable
+                    aria-label="overflow"
+                    onTap={() => setShowOverflows(p => !p)}>
+                    <div className={styles['overflow-button']}>+{overflowedChildren.length}</div>
+                </Tappable>
+                <div className={classNames({
+                    [styles['overflow-container']]: true,
+                    [styles.show]: showOverflows
+                })}>{overflowedChildren}</div>
+            </>
+        )
+    }
+    const MemoizedOverflowContainer = memo(OverflowContainer);
 
     return (
-        <div ref={containerRef} style={{ maxWidth, overflow: "hidden", display: "flex", flexShrink: "0", gap }}>
+        <div ref={containerRef} style={{ maxWidth, display: "flex", flexShrink: "0", gap, position: "relative" }}>
             {visibleChildren}
-            {isOverflowing && (
-                <div onClick={handleShowMore} style={{ marginTop: "5px" }}>
-                    +
-                </div>
-            )}
+            {isOverflowing && <MemoizedOverflowContainer />}
         </div>
     );
 }

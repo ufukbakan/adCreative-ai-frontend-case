@@ -42,7 +42,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
 
     const fold = (e: Event) => {
         if (e.target instanceof HTMLElement) {
-            const ignoreFoldingFor = ["remove-button", "option", "highlighted"]
+            const ignoreFoldingFor = ["remove-button", "option", "highlighted", "overflow"]
             const ariaLabels = getCumilativeAriaLabels(e.target);
             if (!ariaLabels.some(label => ignoreFoldingFor.includes(label))) {
                 setIsExpanded(false);
@@ -83,7 +83,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     return (
         <div className={styles.wrapper} ref={parentRef}>
             <div className={styles['input-container']}>
-                <Overflow gap={9} maxWidth={(parentRef.current?.offsetWidth || 0) / 1.5} children={chips} />
+                <Overflow gap={9} maxWidth={(parentRef.current?.offsetWidth || 0) / 2} children={chips} />
                 {/* <List data={selecteds} render={renderSelected} /> */}
                 <input
                     className={styles.input}
