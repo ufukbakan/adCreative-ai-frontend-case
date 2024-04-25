@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <MultiSelect virtualScroll={true} options={rickAndMortyService.filterByName} label='name' renderOption={
+      <MultiSelect virtualScroll={true} options={rickAndMortyService.filterByName} chipLabel='name' renderOption={
         (option, isSelected) => <RickMortyOption data={option} isSelected={isSelected} />
       } />
     </>

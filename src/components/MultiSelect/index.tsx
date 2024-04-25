@@ -11,7 +11,7 @@ import { inputAtom } from "@/atoms/multiSelectInput";
 
 export interface MultiSelectProps<T> {
     options: T[] | ((input: string) => Promise<T[]>),
-    label: keyof T,
+    chipLabel: keyof T,
     renderOption: (option: T, isSelected: boolean) => JSX.Element,
     virtualScroll?: boolean
 }
@@ -23,7 +23,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     const [input, setInput] = useRecoilState(inputAtom);
     const removeSelected = (element: T) => setSelecteds(p => p.filter(e => e != element));
     const addSelected = (element: T) => setSelecteds(p => [...p, element]);
-    const renderSelected = (element: T) => <Chip children={element[props.label] as ReactNode} removable={true} onRemove={() => removeSelected(element)} />
+    const renderSelected = (element: T) => <Chip children={element[props.chipLabel] as ReactNode} removable={true} onRemove={() => removeSelected(element)} />
     const toggleSelected = (element: T) => {
         if (selecteds.includes(element)) {
             removeSelected(element);
@@ -73,8 +73,8 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
                 >
                     <input
                         type="text"
-                        onChange={e => setInput(e.target.value)}
-                        onKeyUp={e => { if (e.key === "Backspace" && selecteds.length !== 0 && (e.target as HTMLInputElement).value.length === 0) setSelecteds(p => { const [_last, ...others] = p.reverse(); return others; }); }}
+                        onChange={e => setInput(e.target.value.trim())}
+                        onKeyUp={e => { if (e.key === "Backspace" && selecteds.length !== 0 && (e.target as HTMLInputElement).value.length === 0) setSelecteds(p => { const copy = [...p]; copy.pop(); return copy; }); }}
                     />
                 </Tappable>
             </div>
