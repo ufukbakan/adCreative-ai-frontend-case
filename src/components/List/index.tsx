@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
 import styles from "./styles.module.scss";
+import Spin from "../Spin";
 
 interface ListBaseProps<T> {
     visible?: boolean,
@@ -53,8 +54,8 @@ export default function List<T>(props: ListProps<T>) {
         return <div className={styles['virtual-list-item']} aria-label="option" style={{ ...options.style }}>{props.render(data[options.index], options.index)}</div>;
     }
 
-    if (isLoading) return <h2>Loading...</h2>;
-    if (error) return <h2>Error</h2>;
+    if (isLoading) return <Spin size={100} />
+    if (error) return <><h2>Error</h2><p>{error.message}</p></>;
     if (props.virtualScroll === true) {
         const itemCount = data.length;
         const itemSize = Math.floor((props.listHeight / props.itemsToDisplay));
