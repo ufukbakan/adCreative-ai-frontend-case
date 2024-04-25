@@ -1,8 +1,8 @@
-import { ReactElement, memo, useEffect, useRef, useState } from "react";
+import { classNames } from "@/utils/styleUtils";
+import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import { render } from "react-dom";
 import Tappable from "../Tappable";
 import styles from "./styles.module.scss";
-import { classNames } from "@/utils/styleUtils";
 
 interface OverflowProps {
     maxWidth: number;
@@ -63,27 +63,22 @@ export default function Overflow({ children, maxWidth, gap }: OverflowProps) {
         )
     };
 
-    function OverflowContainer() {
-        return (
-            <>
-                <Tappable
-                    aria-label="overflow"
-                    onTap={() => setShowOverflows(p => !p)}>
-                    <div className={styles['overflow-button']}>+{overflowedChildren.length}</div>
-                </Tappable>
-                <div className={classNames({
-                    [styles['overflow-container']]: true,
-                    [styles.show]: showOverflows
-                })}>{overflowedChildren}</div>
-            </>
-        )
-    }
-    const MemoizedOverflowContainer = memo(OverflowContainer);
+    const OverflowContainer = useCallback(() => isOverflowing && <div style={{ position: "relative" }}>
+        <Tappable
+            aria-label="overflow"
+            onTap={() => setShowOverflows(p => !p)}>
+            <div className={styles['overflow-button']}>+{overflowedChildren.length}</div>
+        </Tappable>
+        <div className={classNames({
+            [styles['overflow-container']]: true,
+            [styles.show]: showOverflows
+        })}>{overflowedChildren}</div>
+    </div>, [overflowedChildren, showOverflows])
 
     return (
         <div ref={containerRef} style={{ maxWidth, display: "flex", flexShrink: "0", gap, position: "relative" }}>
             {visibleChildren}
-            {isOverflowing && <MemoizedOverflowContainer />}
+            <OverflowContainer />
         </div>
     );
 }
