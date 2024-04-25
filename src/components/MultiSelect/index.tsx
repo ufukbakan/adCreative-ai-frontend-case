@@ -12,8 +12,13 @@ import { inputAtom } from "@/atoms/multiSelectInput";
 export interface MultiSelectProps<T> {
     options: T[] | ((input: string) => Promise<T[]>),
     chipLabel: keyof T,
-    renderOption: (option: T, isSelected: boolean) => JSX.Element,
+    renderOption: (parameters: RenderParameters<T>) => JSX.Element,
     virtualScroll?: boolean
+}
+interface RenderParameters<T> {
+    option: T,
+    isSelected: boolean,
+    index: number
 }
 
 export default function MultiSelect<T>(props: MultiSelectProps<T>) {
@@ -43,7 +48,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
     const parentRef = useClickOutside<HTMLDivElement>({ callback: fold });
     const heightToBottom = useHeightToBottomScreen(parentRef);
 
-    const renderOption = (element: T) => <Tappable onTap={() => toggleSelected(element)}>{props.renderOption(element, selecteds.includes(element))}</Tappable>
+    const renderOption = (element: T, index: number) => <Tappable onTap={() => toggleSelected(element)}>{props.renderOption({option: element, isSelected: selecteds.includes(element), index })}</Tappable>
     const listData = useMemo(() => {
         if (props.options instanceof Array)
             return props.options;
@@ -57,7 +62,7 @@ export default function MultiSelect<T>(props: MultiSelectProps<T>) {
         render: renderOption,
         virtualScroll: props.virtualScroll ?? false,
         listHeight: heightToBottom - 100,
-        itemsToDisplay: heightToBottom / 120,
+        itemsToDisplay: (heightToBottom - 100) / 120,
         data: listData,
         visible: isExpanded
     }

@@ -6,7 +6,8 @@ import HighlightSubText from "../HighlightSubText";
 
 export type RickMortyOptionProps = {
     data: Result,
-    isSelected: boolean
+    isSelected: boolean,
+    index: number
 }
 
 export default function RickMortyOption(props: RickMortyOptionProps) {
