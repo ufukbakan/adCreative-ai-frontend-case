@@ -10,3 +10,8 @@
 .virtual-list-item:last-child {
   border-radius: 0 0 20px 20px;
 }
+
+.virtual-list-item:has(div input[type="checkbox"]:focus-visible),
+.virtual-list-item:hover {
+  background-color: #dfdfdf;
+}
