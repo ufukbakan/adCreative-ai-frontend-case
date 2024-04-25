@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
+import styles from "./styles.module.scss";
 
 interface ListBaseProps<T> {
     visible?: boolean,
@@ -33,10 +34,6 @@ export default function List<T>(props: ListProps<T>) {
             const fetcher = props.data;
             clearTimeout(debounceTimer.current);
             if (lastFetcher.current !== fetcher) {
-                console.log({
-                    last: lastFetcher.current,
-                    current: fetcher
-                })
                 setIsLoading(true);
             }
             lastFetcher.current = fetcher;
@@ -53,7 +50,7 @@ export default function List<T>(props: ListProps<T>) {
     }, [props.data])
 
     function renderRow(options: ListChildComponentProps) {
-        return <div style={{ display: "flex", ...options.style }}>{props.render(data[options.index], options.index)}</div>;
+        return <div className={styles['virtual-list-item']} style={{ ...options.style }}>{props.render(data[options.index], options.index)}</div>;
     }
 
     if (isLoading) return <h2>Loading...</h2>;
@@ -61,7 +58,7 @@ export default function List<T>(props: ListProps<T>) {
     if (props.virtualScroll === true) {
         const itemCount = data.length;
         const itemSize = Math.floor((props.listHeight / props.itemsToDisplay));
-        const listHeight = props.listHeight;
+        const listHeight = props.listHeight
         return (props.visible ?? true) && <FixedSizeList width="100%" height={listHeight} itemCount={itemCount} itemSize={itemSize}>
             {renderRow}
         </FixedSizeList>

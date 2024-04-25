@@ -1,0 +1,12 @@
+.virtual-list-item {
+  border: 2px solid #94a3b8;
+  border-top: none;
+  padding: 9px;
+}
+.virtual-list-item:first-child {
+  border-top: 2px solid #94a3b8;
+  border-radius: 20px 20px 0 0;
+}
+.virtual-list-item:last-child {
+  border-radius: 0 0 20px 20px;
+}
